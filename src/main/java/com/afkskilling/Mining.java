@@ -1,12 +1,8 @@
 package com.afkskilling;
 
 import java.util.Set;
-import net.runelite.api.GameObject;
+import net.runelite.api.Client;
 import net.runelite.api.Player;
-import net.runelite.api.Tile;
-import net.runelite.api.WallObject;
-import net.runelite.api.WorldView;
-import net.runelite.api.coords.LocalPoint;
 import net.runelite.api.gameval.AnimationID;
 import net.runelite.api.gameval.ObjectID;
 
@@ -101,85 +97,29 @@ final class Mining implements AfkActivity
 		STAR,
 		MOTHERLODE,
 		AMETHYST,
-		OTHER,
 	}
 
 	@Override
-	public String detect(Player player, AfkSkillingConfig config)
+	public String detect(Client client, Player player, AfkSkillingConfig config)
 	{
 		if (!MINING_ANIMATIONS.contains(player.getAnimation()))
 		{
 			return null;
 		}
-		switch (spot(player))
+		Spot spot = Nearby.find(player, Mining::spot);
+		if (spot == null)
+		{
+			return config.miningOther() ? "Mining" : null;
+		}
+		switch (spot)
 		{
 			case STAR:
 				return config.miningStars() ? "Star mining" : null;
 			case MOTHERLODE:
 				return config.miningMotherlode() ? "Motherlode mining" : null;
-			case AMETHYST:
-				return config.miningAmethyst() ? "Amethyst mining" : null;
 			default:
-				return config.miningOther() ? "Mining" : null;
+				return config.miningAmethyst() ? "Amethyst mining" : null;
 		}
-	}
-
-	/**
-	 * What's being mined, from the objects on the tiles around the player. Objects aren't interaction
-	 * targets, and a multi-tile star sits on every tile it covers, so the 3x3 around the player is enough.
-	 */
-	private static Spot spot(Player player)
-	{
-		WorldView view = player.getWorldView();
-		LocalPoint location = player.getLocalLocation();
-		if (view == null || location == null)
-		{
-			return Spot.OTHER;
-		}
-		Tile[][] tiles = view.getScene().getTiles()[view.getPlane()];
-		int px = location.getSceneX();
-		int py = location.getSceneY();
-		for (int x = px - 1; x <= px + 1; x++)
-		{
-			for (int y = py - 1; y <= py + 1; y++)
-			{
-				if (x < 0 || y < 0 || x >= tiles.length || y >= tiles[x].length || tiles[x][y] == null)
-				{
-					continue;
-				}
-				Spot spot = spot(tiles[x][y]);
-				if (spot != Spot.OTHER)
-				{
-					return spot;
-				}
-			}
-		}
-		return Spot.OTHER;
-	}
-
-	private static Spot spot(Tile tile)
-	{
-		WallObject wall = tile.getWallObject();
-		if (wall != null)
-		{
-			Spot spot = spot(wall.getId());
-			if (spot != Spot.OTHER)
-			{
-				return spot;
-			}
-		}
-		for (GameObject object : tile.getGameObjects())
-		{
-			if (object != null)
-			{
-				Spot spot = spot(object.getId());
-				if (spot != Spot.OTHER)
-				{
-					return spot;
-				}
-			}
-		}
-		return Spot.OTHER;
 	}
 
 	private static Spot spot(int objectId)
@@ -192,6 +132,6 @@ final class Mining implements AfkActivity
 		{
 			return Spot.MOTHERLODE;
 		}
-		return AMETHYST.contains(objectId) ? Spot.AMETHYST : Spot.OTHER;
+		return AMETHYST.contains(objectId) ? Spot.AMETHYST : null;
 	}
 }

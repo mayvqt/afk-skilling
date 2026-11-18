@@ -2,14 +2,27 @@ package com.afkskilling;
 
 import java.util.Set;
 import net.runelite.api.Actor;
+import net.runelite.api.Client;
 import net.runelite.api.NPC;
 import net.runelite.api.NPCComposition;
 import net.runelite.api.Player;
 import net.runelite.api.gameval.AnimationID;
+import net.runelite.api.gameval.NpcID;
 
-/** Fishing: interacting with any NPC that has a fishing option, or playing a rod fishing animation. */
+/**
+ * Fishing, toggled per spot: anglerfish, karambwans, or any other spot (off by default, so power-fishing
+ * isn't dimmed). The Sailing boat spots are separate NPCs from the shore ones.
+ */
 final class Fishing implements AfkActivity
 {
+	private static final Set<Integer> ANGLER_SPOTS = Set.of(
+		NpcID.PISCARILIUSFISH,
+		NpcID.FISHING_BOAT_PISCARILIUSFISH);
+
+	private static final Set<Integer> KARAMBWAN_SPOTS = Set.of(
+		NpcID._0_45_48_KARAMBWAN,
+		NpcID.FISHING_BOAT_KARAMBWANFISH);
+
 	private static final Set<String> FISHING_OPTIONS = Set.of(
 		"net", "small net", "big net", "bait", "lure", "cage", "harpoon", "fish", "catch");
 
@@ -29,10 +42,23 @@ final class Fishing implements AfkActivity
 		AnimationID.HUMAN_FISHING_CASTING_NPC);
 
 	@Override
-	public String detect(Player player, AfkSkillingConfig config)
+	public String detect(Client client, Player player, AfkSkillingConfig config)
 	{
-		boolean fishing = FISHING_ANIMATIONS.contains(player.getAnimation()) || isFishingSpot(player.getInteracting());
-		return fishing && config.fishing() ? "Fishing" : null;
+		Actor target = player.getInteracting();
+		if (target instanceof NPC)
+		{
+			int id = ((NPC) target).getId();
+			if (ANGLER_SPOTS.contains(id))
+			{
+				return config.fishingAnglers() ? "Anglerfish" : null;
+			}
+			if (KARAMBWAN_SPOTS.contains(id))
+			{
+				return config.fishingKarambwans() ? "Karambwans" : null;
+			}
+		}
+		boolean fishing = FISHING_ANIMATIONS.contains(player.getAnimation()) || isFishingSpot(target);
+		return fishing && config.fishingOther() ? "Fishing" : null;
 	}
 
 	private static boolean isFishingSpot(Actor target)

@@ -5,8 +5,11 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.inject.Inject;
+import lombok.extern.slf4j.Slf4j;
+import net.runelite.api.Actor;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
+import net.runelite.api.NPC;
 import net.runelite.api.Player;
 import net.runelite.api.coords.WorldPoint;
 import net.runelite.api.events.GameStateChanged;
@@ -21,14 +24,18 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.ui.overlay.OverlayManager;
 
+@Slf4j
 @PluginDescriptor(
 	name = "AFK Skilling",
 	description = "Dims the screen while you AFK skill, then pulses a soft glow when you go idle",
-	tags = {"afk", "idle", "skilling", "fishing", "mining", "stars", "notifier", "dim"}
+	tags = {"afk", "idle", "skilling", "fishing", "mining", "stars", "woodcutting", "sailing", "notifier", "dim"}
 )
 public class AfkSkillingPlugin extends Plugin
 {
-	static final List<AfkActivity> ACTIVITIES = List.of(new Fishing(), new Mining());
+	// Instances, not constants: Repeating keeps per-tick state, so each plugin start gets fresh ones.
+	private final List<AfkActivity> activities = List.of(
+		new Fishing(), new Mining(), new Woodcutting(), new Salvaging(), new GemstoneCrab(),
+		Repeating.plankMake(), Repeating.campfire());
 
 	// gameval has no constant for "no animation"; the legacy AnimationID.IDLE is deprecated.
 	private static final int NO_ANIMATION = -1;
@@ -55,6 +62,7 @@ public class AfkSkillingPlugin extends Plugin
 	private MouseManager mouseManager;
 
 	private WorldPoint lastLocation;
+	private String lastDebug;
 
 	private final KeyListener keyListener = new KeyListener()
 	{
@@ -128,9 +136,9 @@ public class AfkSkillingPlugin extends Plugin
 		lastLocation = location;
 
 		String active = null;
-		for (AfkActivity activity : ACTIVITIES)
+		for (AfkActivity activity : activities)
 		{
-			active = activity.detect(player, config);
+			active = activity.detect(client, player, config);
 			if (active != null)
 			{
 				overlay.setActivity(active);
@@ -138,6 +146,17 @@ public class AfkSkillingPlugin extends Plugin
 			}
 		}
 		tracker.tick(active != null, idle, config.alertDelay());
+
+		// For adding activities: shows the animation and target ids to match on, once per change.
+		Actor target = player.getInteracting();
+		String debug = "anim=" + player.getAnimation() + " target="
+			+ (target instanceof NPC ? target.getName() + "#" + ((NPC) target).getId() : target == null ? "none" : target.getName())
+			+ " activity=" + active;
+		if (!debug.equals(lastDebug))
+		{
+			lastDebug = debug;
+			log.debug("AFK: {} phase={}", debug, tracker.phase());
+		}
 	}
 
 	@Provides

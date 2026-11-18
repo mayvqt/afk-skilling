@@ -13,11 +13,32 @@ public interface AfkSkillingConfig extends Config
 	String GROUP = "afkskilling";
 
 	@ConfigSection(
-		name = "Activities",
-		description = "Which AFK activities dim the screen and alert when they stop",
+		name = "Fishing",
+		description = "Fishing spots that dim the screen and alert when they stop",
 		position = 10
 	)
-	String activities = "activities";
+	String fishing = "fishing";
+
+	@ConfigSection(
+		name = "Mining",
+		description = "Mining spots that dim the screen and alert when they stop",
+		position = 11
+	)
+	String mining = "mining";
+
+	@ConfigSection(
+		name = "Woodcutting",
+		description = "Trees that dim the screen and alert when they stop",
+		position = 12
+	)
+	String woodcutting = "woodcutting";
+
+	@ConfigSection(
+		name = "Other activities",
+		description = "Other AFK activities that dim the screen and alert when they stop",
+		position = 13
+	)
+	String other = "other";
 
 	@Range(max = 95)
 	@Units(Units.PERCENT)
@@ -68,21 +89,47 @@ public interface AfkSkillingConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "fishing",
-		name = "Fishing",
-		description = "Any fishing spot",
-		section = activities
+		keyName = "fishingAnglers",
+		name = "Anglerfish",
+		description = "Anglerfish spots, on shore and from a boat",
+		section = fishing,
+		position = 1
 	)
-	default boolean fishing()
+	default boolean fishingAnglers()
 	{
 		return true;
+	}
+
+	@ConfigItem(
+		keyName = "fishingKarambwans",
+		name = "Karambwans",
+		description = "Karambwan spots, on shore and from a boat",
+		section = fishing,
+		position = 2
+	)
+	default boolean fishingKarambwans()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "fishingOther",
+		name = "Other fishing",
+		description = "Any other spot. Off by default so power-fishing isn't dimmed and alerted every few seconds",
+		section = fishing,
+		position = 3
+	)
+	default boolean fishingOther()
+	{
+		return false;
 	}
 
 	@ConfigItem(
 		keyName = "miningStars",
 		name = "Shooting stars",
 		description = "Mining a shooting star; alerts when it drops a tier",
-		section = activities
+		section = mining,
+		position = 1
 	)
 	default boolean miningStars()
 	{
@@ -93,7 +140,8 @@ public interface AfkSkillingConfig extends Config
 		keyName = "miningMotherlode",
 		name = "Motherlode Mine",
 		description = "Mining pay-dirt veins",
-		section = activities
+		section = mining,
+		position = 2
 	)
 	default boolean miningMotherlode()
 	{
@@ -104,7 +152,8 @@ public interface AfkSkillingConfig extends Config
 		keyName = "miningAmethyst",
 		name = "Amethyst",
 		description = "Mining amethyst crystals",
-		section = activities
+		section = mining,
+		position = 3
 	)
 	default boolean miningAmethyst()
 	{
@@ -115,10 +164,95 @@ public interface AfkSkillingConfig extends Config
 		keyName = "miningOther",
 		name = "Other mining",
 		description = "Any other rock. Off by default so power-mining isn't dimmed and alerted every few seconds",
-		section = activities
+		section = mining,
+		position = 4
 	)
 	default boolean miningOther()
 	{
 		return false;
+	}
+
+	@ConfigItem(
+		keyName = "woodcuttingMagic",
+		name = "Magic trees",
+		description = "Cutting magic trees",
+		section = woodcutting,
+		position = 1
+	)
+	default boolean woodcuttingMagic()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "woodcuttingYew",
+		name = "Yews",
+		description = "Cutting yew trees",
+		section = woodcutting,
+		position = 2
+	)
+	default boolean woodcuttingYew()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "woodcuttingRedwood",
+		name = "Redwoods",
+		description = "Cutting redwood trees",
+		section = woodcutting,
+		position = 3
+	)
+	default boolean woodcuttingRedwood()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "salvaging",
+		name = "Salvaging",
+		description = "Sailing: salvaging with a hook",
+		section = other,
+		position = 1
+	)
+	default boolean salvaging()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "gemstoneCrab",
+		name = "Gemstone crab",
+		description = "Attacking the Gemstone Crab; alerts when it burrows",
+		section = other,
+		position = 2
+	)
+	default boolean gemstoneCrab()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "plankMake",
+		name = "Plank Make",
+		description = "Casting Plank Make on an inventory of logs",
+		section = other,
+		position = 3
+	)
+	default boolean plankMake()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "campfire",
+		name = "Campfires",
+		description = "Tending a Forestry campfire",
+		section = other,
+		position = 4
+	)
+	default boolean campfire()
+	{
+		return true;
 	}
 }
