@@ -1,6 +1,9 @@
 package com.afkskilling;
 
+import javax.inject.Singleton;
+
 /** Per-tick AFK state: dimmed while an activity runs, alerting once the player stands idle after it. */
+@Singleton
 final class AfkTracker
 {
 	enum Phase
