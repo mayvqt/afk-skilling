@@ -127,18 +127,15 @@ public class AfkSkillingPlugin extends Plugin
 			&& location.equals(lastLocation);
 		lastLocation = location;
 
-		AfkActivity active = null;
+		String active = null;
 		for (AfkActivity activity : ACTIVITIES)
 		{
-			if (activity.isEnabled(config) && activity.isActive(player))
+			active = activity.detect(player, config);
+			if (active != null)
 			{
-				active = activity;
+				overlay.setActivity(active);
 				break;
 			}
-		}
-		if (active != null)
-		{
-			overlay.setActivity(active.label());
 		}
 		tracker.tick(active != null, idle, config.alertDelay());
 	}

@@ -29,21 +29,10 @@ final class Fishing implements AfkActivity
 		AnimationID.HUMAN_FISHING_CASTING_NPC);
 
 	@Override
-	public String label()
+	public String detect(Player player, AfkSkillingConfig config)
 	{
-		return "Fishing";
-	}
-
-	@Override
-	public boolean isEnabled(AfkSkillingConfig config)
-	{
-		return config.fishing();
-	}
-
-	@Override
-	public boolean isActive(Player player)
-	{
-		return FISHING_ANIMATIONS.contains(player.getAnimation()) || isFishingSpot(player.getInteracting());
+		boolean fishing = FISHING_ANIMATIONS.contains(player.getAnimation()) || isFishingSpot(player.getInteracting());
+		return fishing && config.fishing() ? "Fishing" : null;
 	}
 
 	private static boolean isFishingSpot(Actor target)

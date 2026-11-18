@@ -79,13 +79,46 @@ public interface AfkSkillingConfig extends Config
 	}
 
 	@ConfigItem(
-		keyName = "mining",
-		name = "Mining",
-		description = "Any pickaxe: rocks, Motherlode, amethyst and shooting stars",
+		keyName = "miningStars",
+		name = "Shooting stars",
+		description = "Mining a shooting star; alerts when it drops a tier",
 		section = activities
 	)
-	default boolean mining()
+	default boolean miningStars()
 	{
 		return true;
+	}
+
+	@ConfigItem(
+		keyName = "miningMotherlode",
+		name = "Motherlode Mine",
+		description = "Mining pay-dirt veins",
+		section = activities
+	)
+	default boolean miningMotherlode()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "miningAmethyst",
+		name = "Amethyst",
+		description = "Mining amethyst crystals",
+		section = activities
+	)
+	default boolean miningAmethyst()
+	{
+		return true;
+	}
+
+	@ConfigItem(
+		keyName = "miningOther",
+		name = "Other mining",
+		description = "Any other rock. Off by default so power-mining isn't dimmed and alerted every few seconds",
+		section = activities
+	)
+	default boolean miningOther()
+	{
+		return false;
 	}
 }
