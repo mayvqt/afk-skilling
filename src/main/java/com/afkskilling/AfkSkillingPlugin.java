@@ -30,6 +30,9 @@ public class AfkSkillingPlugin extends Plugin
 {
 	static final List<AfkActivity> ACTIVITIES = List.of(new Fishing());
 
+	// gameval has no constant for "no animation"; the legacy AnimationID.IDLE is deprecated.
+	private static final int NO_ANIMATION = -1;
+
 	@Inject
 	private Client client;
 
@@ -119,7 +122,7 @@ public class AfkSkillingPlugin extends Plugin
 			return;
 		}
 		WorldPoint location = player.getWorldLocation();
-		boolean idle = player.getAnimation() == -1
+		boolean idle = player.getAnimation() == NO_ANIMATION
 			&& player.getInteracting() == null
 			&& location.equals(lastLocation);
 		lastLocation = location;
