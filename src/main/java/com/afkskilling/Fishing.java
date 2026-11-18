@@ -41,8 +41,12 @@ final class Fishing implements AfkActivity
 		AnimationID.HUMAN_FISHING_ONSPOT_BRUT,
 		AnimationID.HUMAN_FISHING_CASTING_NPC);
 
+	private static final Caption ANGLERS = new Caption("Fishing", "catching anglers", "anglers stopped");
+	private static final Caption KARAMBWANS = new Caption("Fishing", "catching karambwans", "karambwans stopped");
+	private static final Caption OTHER = new Caption("Fishing", "fish biting", "line's quiet");
+
 	@Override
-	public String detect(Client client, Player player, AfkSkillingConfig config)
+	public Caption detect(Client client, Player player, AfkSkillingConfig config)
 	{
 		Actor target = player.getInteracting();
 		if (target instanceof NPC)
@@ -50,15 +54,15 @@ final class Fishing implements AfkActivity
 			int id = ((NPC) target).getId();
 			if (ANGLER_SPOTS.contains(id))
 			{
-				return config.fishingAnglers() ? "Fishing" : null;
+				return config.fishingAnglers() ? ANGLERS : null;
 			}
 			if (KARAMBWAN_SPOTS.contains(id))
 			{
-				return config.fishingKarambwans() ? "Fishing" : null;
+				return config.fishingKarambwans() ? KARAMBWANS : null;
 			}
 		}
 		boolean fishing = FISHING_ANIMATIONS.contains(player.getAnimation()) || isFishingSpot(target);
-		return fishing && config.fishingOther() ? "Fishing" : null;
+		return fishing && config.fishingOther() ? OTHER : null;
 	}
 
 	private static boolean isFishingSpot(Actor target)

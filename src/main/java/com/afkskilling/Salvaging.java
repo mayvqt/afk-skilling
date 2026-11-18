@@ -18,9 +18,11 @@ final class Salvaging implements AfkActivity
 		AnimationID.HUMAN_SAILING_SALVAGE01_LARGE01_DROP01,
 		AnimationID.HUMAN_SAILING_SALVAGE01_LARGE01_INTERACT01);
 
+	private static final Caption CAPTION = new Caption("Sailing", "the hook's out", "nothing left below");
+
 	@Override
-	public String detect(Client client, Player player, AfkSkillingConfig config)
+	public Caption detect(Client client, Player player, AfkSkillingConfig config)
 	{
-		return config.salvaging() && SALVAGING_ANIMATIONS.contains(player.getAnimation()) ? "Sailing" : null;
+		return config.salvaging() && SALVAGING_ANIMATIONS.contains(player.getAnimation()) ? CAPTION : null;
 	}
 }

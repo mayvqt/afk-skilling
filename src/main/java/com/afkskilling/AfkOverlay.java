@@ -32,7 +32,7 @@ final class AfkOverlay extends Overlay
 	private double alert;
 	private double text;
 	private long lastNanos;
-	private volatile String activity;
+	private volatile Caption caption;
 
 	@Inject
 	AfkOverlay(Client client, AfkSkillingConfig config, AfkTracker tracker)
@@ -69,9 +69,10 @@ final class AfkOverlay extends Overlay
 			g.fillRect(0, 0, w, h);
 		}
 		double seconds = now / 1e9;
-		if (text >= 0.002 && activity != null)
+		Caption caption = this.caption;
+		if (text >= 0.002 && caption != null)
 		{
-			drawActivity(g, w, h, seconds);
+			drawCaption(g, caption, w, h, seconds);
 		}
 		if (alert >= 0.002)
 		{
@@ -89,17 +90,16 @@ final class AfkOverlay extends Overlay
 		return null;
 	}
 
-	void setActivity(String activity)
+	void setCaption(Caption caption)
 	{
-		this.activity = activity;
+		this.caption = caption;
 	}
 
-	/** The activity name, breathing slowly, with a quiet line under it; swaps to "stopped" while alerting. */
-	private void drawActivity(Graphics2D g, int w, int h, double seconds)
+	/** The skill, breathing slowly, with a quiet line under it that swaps to the stopped line while alerting. */
+	private void drawCaption(Graphics2D g, Caption caption, int w, int h, double seconds)
 	{
-		boolean alerting = alert > 0.5;
-		String title = alerting ? activity + " stopped" : activity;
-		String subtitle = alerting ? "click anywhere when you're back" : "relax, you'll know when it stops";
+		String title = caption.skill;
+		String subtitle = alert > 0.5 ? caption.stopped : caption.doing;
 		double breathe = 0.8 + 0.2 * Math.sin(2 * Math.PI * seconds / BREATHE_SECONDS);
 
 		Object aa = g.getRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING);

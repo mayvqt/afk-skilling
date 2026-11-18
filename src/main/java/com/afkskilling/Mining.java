@@ -88,7 +88,7 @@ final class Mining implements AfkActivity
 		ObjectID.MOTHERLODE_ORE_MIDDLE,
 		ObjectID.MOTHERLODE_ORE_RIGHT);
 
-	private static final Set<Integer> AMETHYST = Set.of(
+	private static final Set<Integer> AMETHYST_ROCKS = Set.of(
 		ObjectID.AMETHYSTROCK1,
 		ObjectID.AMETHYSTROCK2);
 
@@ -105,8 +105,14 @@ final class Mining implements AfkActivity
 		DENSE_ESSENCE,
 	}
 
+	private static final Caption STAR = new Caption("Mining", "mining a star", "star shrank");
+	private static final Caption MOTHERLODE = new Caption("Mining", "mining pay-dirt", "vein's dry");
+	private static final Caption AMETHYST = new Caption("Mining", "mining amethyst", "amethyst's tapped");
+	private static final Caption DENSE_ESSENCE = new Caption("Mining", "mining essence", "pillar's spent");
+	private static final Caption OTHER = new Caption("Mining", "mining ore", "rock's empty");
+
 	@Override
-	public String detect(Client client, Player player, AfkSkillingConfig config)
+	public Caption detect(Client client, Player player, AfkSkillingConfig config)
 	{
 		if (!MINING_ANIMATIONS.contains(player.getAnimation()))
 		{
@@ -115,18 +121,18 @@ final class Mining implements AfkActivity
 		Spot spot = Nearby.find(player, Mining::spot);
 		if (spot == null)
 		{
-			return config.miningOther() ? "Mining" : null;
+			return config.miningOther() ? OTHER : null;
 		}
 		switch (spot)
 		{
 			case STAR:
-				return config.miningStars() ? "Mining" : null;
+				return config.miningStars() ? STAR : null;
 			case MOTHERLODE:
-				return config.miningMotherlode() ? "Mining" : null;
+				return config.miningMotherlode() ? MOTHERLODE : null;
 			case AMETHYST:
-				return config.miningAmethyst() ? "Mining" : null;
+				return config.miningAmethyst() ? AMETHYST : null;
 			default:
-				return config.miningDenseEssence() ? "Mining" : null;
+				return config.miningDenseEssence() ? DENSE_ESSENCE : null;
 		}
 	}
 
@@ -140,7 +146,7 @@ final class Mining implements AfkActivity
 		{
 			return Spot.MOTHERLODE;
 		}
-		if (AMETHYST.contains(objectId))
+		if (AMETHYST_ROCKS.contains(objectId))
 		{
 			return Spot.AMETHYST;
 		}

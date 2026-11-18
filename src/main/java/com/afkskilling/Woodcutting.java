@@ -33,8 +33,12 @@ final class Woodcutting implements AfkActivity
 		AnimationID.HUMAN_WOODCUTTING_TRAILBLAZER_RELOADED_AXE,
 		AnimationID.HUMAN_WOODCUTTING_TRAILBLAZER_RELOADED_AXE_NO_INFERNAL);
 
+	private static final Caption MAGIC = new Caption("Woodcutting", "chopping magics", "magic's down");
+	private static final Caption YEW = new Caption("Woodcutting", "chopping yews", "yew's down");
+	private static final Caption REDWOOD = new Caption("Woodcutting", "chopping redwoods", "redwood's down");
+
 	@Override
-	public String detect(Client client, Player player, AfkSkillingConfig config)
+	public Caption detect(Client client, Player player, AfkSkillingConfig config)
 	{
 		if (!WOODCUTTING_ANIMATIONS.contains(player.getAnimation()))
 		{
@@ -48,11 +52,11 @@ final class Woodcutting implements AfkActivity
 		switch (tree)
 		{
 			case MAGIC:
-				return config.woodcuttingMagic() ? "Woodcutting" : null;
+				return config.woodcuttingMagic() ? MAGIC : null;
 			case YEW:
-				return config.woodcuttingYew() ? "Woodcutting" : null;
+				return config.woodcuttingYew() ? YEW : null;
 			default:
-				return config.woodcuttingRedwood() ? "Woodcutting" : null;
+				return config.woodcuttingRedwood() ? REDWOOD : null;
 		}
 	}
 

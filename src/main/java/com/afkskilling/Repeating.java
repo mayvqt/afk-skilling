@@ -14,34 +14,35 @@ final class Repeating implements AfkActivity
 {
 	private static final int GAP_TICKS = 4;
 
-	private final String label;
+	private final Caption caption;
 	private final Set<Integer> animations;
 	private final Predicate<AfkSkillingConfig> enabled;
 	private int ticksSinceSeen = GAP_TICKS + 1;
 
-	private Repeating(String label, Set<Integer> animations, Predicate<AfkSkillingConfig> enabled)
+	private Repeating(Caption caption, Set<Integer> animations, Predicate<AfkSkillingConfig> enabled)
 	{
-		this.label = label;
+		this.caption = caption;
 		this.animations = animations;
 		this.enabled = enabled;
 	}
 
 	static Repeating plankMake()
 	{
-		return new Repeating("Magic",Set.of(AnimationID.DREAM_PLAYER_MAKE_PLANK_SPELL),
-			AfkSkillingConfig::plankMake);
+		return new Repeating(new Caption("Magic", "making planks", "out of logs"),
+			Set.of(AnimationID.DREAM_PLAYER_MAKE_PLANK_SPELL), AfkSkillingConfig::plankMake);
 	}
 
+	/** The Forestry campfire never goes out; it stops when the player runs out of logs. */
 	static Repeating campfire()
 	{
-		return new Repeating("Firemaking",Set.of(AnimationID.FORESTRY_CAMPFIRE),
-			AfkSkillingConfig::campfire);
+		return new Repeating(new Caption("Firemaking", "tending the fire", "out of logs"),
+			Set.of(AnimationID.FORESTRY_CAMPFIRE), AfkSkillingConfig::campfire);
 	}
 
 	@Override
-	public String detect(Client client, Player player, AfkSkillingConfig config)
+	public Caption detect(Client client, Player player, AfkSkillingConfig config)
 	{
 		ticksSinceSeen = animations.contains(player.getAnimation()) ? 0 : ticksSinceSeen + 1;
-		return ticksSinceSeen <= GAP_TICKS && enabled.test(config) ? label : null;
+		return ticksSinceSeen <= GAP_TICKS && enabled.test(config) ? caption : null;
 	}
 }

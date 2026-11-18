@@ -135,13 +135,13 @@ public class AfkSkillingPlugin extends Plugin
 			&& location.equals(lastLocation);
 		lastLocation = location;
 
-		String active = null;
+		Caption active = null;
 		for (AfkActivity activity : activities)
 		{
 			active = activity.detect(client, player, config);
 			if (active != null)
 			{
-				overlay.setActivity(active);
+				overlay.setCaption(active);
 				break;
 			}
 		}
