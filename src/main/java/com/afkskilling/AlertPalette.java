@@ -2,7 +2,9 @@ package com.afkskilling;
 
 import java.awt.Color;
 
-enum AlertPalette
+// Public because the config proxy returns it: a package-private config enum throws IllegalAccessError
+// on the client thread, which freezes the client.
+public enum AlertPalette
 {
 	PASTELS("Soft pastels", Colors.LAVENDER, Colors.PEACH, Colors.MINT, Colors.SKY, Colors.ROSE),
 	LAVENDER("Lavender", Colors.LAVENDER),
