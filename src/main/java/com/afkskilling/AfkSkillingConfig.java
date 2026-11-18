@@ -77,4 +77,15 @@ public interface AfkSkillingConfig extends Config
 	{
 		return true;
 	}
+
+	@ConfigItem(
+		keyName = "mining",
+		name = "Mining",
+		description = "Any pickaxe: rocks, Motherlode, amethyst and shooting stars",
+		section = activities
+	)
+	default boolean mining()
+	{
+		return true;
+	}
 }

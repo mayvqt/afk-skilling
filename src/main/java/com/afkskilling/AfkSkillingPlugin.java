@@ -24,11 +24,11 @@ import net.runelite.client.ui.overlay.OverlayManager;
 @PluginDescriptor(
 	name = "AFK Skilling",
 	description = "Dims the screen while you AFK skill, then pulses a soft glow when you go idle",
-	tags = {"afk", "idle", "skilling", "fishing", "notifier", "dim"}
+	tags = {"afk", "idle", "skilling", "fishing", "mining", "stars", "notifier", "dim"}
 )
 public class AfkSkillingPlugin extends Plugin
 {
-	static final List<AfkActivity> ACTIVITIES = List.of(new Fishing());
+	static final List<AfkActivity> ACTIVITIES = List.of(new Fishing(), new Mining());
 
 	// gameval has no constant for "no animation"; the legacy AnimationID.IDLE is deprecated.
 	private static final int NO_ANIMATION = -1;
