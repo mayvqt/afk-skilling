@@ -40,23 +40,30 @@ final class Woodcutting implements AfkActivity
 		{
 			return null;
 		}
-		String tree = Nearby.find(player, id -> tree(client, id));
+		Tree tree = Nearby.find(player, id -> tree(client, id));
 		if (tree == null)
 		{
 			return null;
 		}
 		switch (tree)
 		{
-			case "Magic trees":
-				return config.woodcuttingMagic() ? tree : null;
-			case "Yews":
-				return config.woodcuttingYew() ? tree : null;
+			case MAGIC:
+				return config.woodcuttingMagic() ? "Woodcutting" : null;
+			case YEW:
+				return config.woodcuttingYew() ? "Woodcutting" : null;
 			default:
-				return config.woodcuttingRedwood() ? tree : null;
+				return config.woodcuttingRedwood() ? "Woodcutting" : null;
 		}
 	}
 
-	private static String tree(Client client, int objectId)
+	private enum Tree
+	{
+		MAGIC,
+		YEW,
+		REDWOOD,
+	}
+
+	private static Tree tree(Client client, int objectId)
 	{
 		ObjectComposition composition = client.getObjectDefinition(objectId);
 		String name = composition == null ? null : composition.getName();
@@ -67,12 +74,12 @@ final class Woodcutting implements AfkActivity
 		name = name.toLowerCase();
 		if (name.startsWith("magic tree"))
 		{
-			return "Magic trees";
+			return Tree.MAGIC;
 		}
 		if (name.startsWith("yew"))
 		{
-			return "Yews";
+			return Tree.YEW;
 		}
-		return name.startsWith("redwood") ? "Redwoods" : null;
+		return name.startsWith("redwood") ? Tree.REDWOOD : null;
 	}
 }

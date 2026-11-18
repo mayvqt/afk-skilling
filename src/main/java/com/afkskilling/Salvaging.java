@@ -21,6 +21,6 @@ final class Salvaging implements AfkActivity
 	@Override
 	public String detect(Client client, Player player, AfkSkillingConfig config)
 	{
-		return config.salvaging() && SALVAGING_ANIMATIONS.contains(player.getAnimation()) ? "Salvaging" : null;
+		return config.salvaging() && SALVAGING_ANIMATIONS.contains(player.getAnimation()) ? "Sailing" : null;
 	}
 }

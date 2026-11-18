@@ -114,11 +114,11 @@ final class Mining implements AfkActivity
 		switch (spot)
 		{
 			case STAR:
-				return config.miningStars() ? "Star mining" : null;
+				return config.miningStars() ? "Mining" : null;
 			case MOTHERLODE:
-				return config.miningMotherlode() ? "Motherlode mining" : null;
+				return config.miningMotherlode() ? "Mining" : null;
 			default:
-				return config.miningAmethyst() ? "Amethyst mining" : null;
+				return config.miningAmethyst() ? "Mining" : null;
 		}
 	}
 

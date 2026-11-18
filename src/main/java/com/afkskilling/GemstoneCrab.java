@@ -14,6 +14,6 @@ final class GemstoneCrab implements AfkActivity
 	{
 		Actor target = player.getInteracting();
 		boolean attacking = target instanceof NPC && ((NPC) target).getId() == NpcID.GEMSTONE_CRAB;
-		return attacking && config.gemstoneCrab() ? "Gemstone crab" : null;
+		return attacking && config.gemstoneCrab() ? "Combat" : null;
 	}
 }

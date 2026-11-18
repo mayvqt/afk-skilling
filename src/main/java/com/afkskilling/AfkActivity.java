@@ -8,7 +8,8 @@ import net.runelite.api.Player;
 interface AfkActivity
 {
 	/**
-	 * What the local player is doing this tick, shown in the middle of the dimmed screen, or null when
+	 * The skill the local player is training this tick ("Fishing", not the spot), shown in the middle of
+	 * the dimmed screen, or null when
 	 * they aren't doing this activity or it's switched off in the config.
 	 */
 	@Nullable

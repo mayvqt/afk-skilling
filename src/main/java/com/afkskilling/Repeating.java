@@ -28,13 +28,13 @@ final class Repeating implements AfkActivity
 
 	static Repeating plankMake()
 	{
-		return new Repeating("Plank Make", Set.of(AnimationID.DREAM_PLAYER_MAKE_PLANK_SPELL),
+		return new Repeating("Magic",Set.of(AnimationID.DREAM_PLAYER_MAKE_PLANK_SPELL),
 			AfkSkillingConfig::plankMake);
 	}
 
 	static Repeating campfire()
 	{
-		return new Repeating("Tending the campfire", Set.of(AnimationID.FORESTRY_CAMPFIRE),
+		return new Repeating("Firemaking",Set.of(AnimationID.FORESTRY_CAMPFIRE),
 			AfkSkillingConfig::campfire);
 	}
 

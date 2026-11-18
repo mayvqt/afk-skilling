@@ -50,11 +50,11 @@ final class Fishing implements AfkActivity
 			int id = ((NPC) target).getId();
 			if (ANGLER_SPOTS.contains(id))
 			{
-				return config.fishingAnglers() ? "Anglerfish" : null;
+				return config.fishingAnglers() ? "Fishing" : null;
 			}
 			if (KARAMBWAN_SPOTS.contains(id))
 			{
-				return config.fishingKarambwans() ? "Karambwans" : null;
+				return config.fishingKarambwans() ? "Fishing" : null;
 			}
 		}
 		boolean fishing = FISHING_ANIMATIONS.contains(player.getAnimation()) || isFishingSpot(target);
