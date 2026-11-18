@@ -7,7 +7,7 @@ import net.runelite.api.gameval.AnimationID;
 import net.runelite.api.gameval.ObjectID;
 
 /**
- * Mining with any pickaxe, toggled per spot: shooting stars, Motherlode, amethyst, or other rocks (off by
+ * Mining with any pickaxe, toggled per spot: shooting stars, Motherlode, amethyst, dense essence, or other rocks (off by
  * default, so power-mining isn't dimmed). A star dropping a tier stops the animation, which triggers the
  * alert. Boss and raid variants (Zalcano, Het) are left out.
  */
@@ -92,11 +92,17 @@ final class Mining implements AfkActivity
 		ObjectID.AMETHYSTROCK1,
 		ObjectID.AMETHYSTROCK2);
 
+	private static final Set<Integer> DENSE_RUNESTONES = Set.of(
+		ObjectID.ARCEUUS_RUNESTONE_BASE_MINE,
+		ObjectID.ARCEUUS_RUNESTONE_MIDDLE_MINE,
+		ObjectID.ARCEUUS_RUNESTONE_TOP_MINE);
+
 	private enum Spot
 	{
 		STAR,
 		MOTHERLODE,
 		AMETHYST,
+		DENSE_ESSENCE,
 	}
 
 	@Override
@@ -117,8 +123,10 @@ final class Mining implements AfkActivity
 				return config.miningStars() ? "Mining" : null;
 			case MOTHERLODE:
 				return config.miningMotherlode() ? "Mining" : null;
-			default:
+			case AMETHYST:
 				return config.miningAmethyst() ? "Mining" : null;
+			default:
+				return config.miningDenseEssence() ? "Mining" : null;
 		}
 	}
 
@@ -132,6 +140,10 @@ final class Mining implements AfkActivity
 		{
 			return Spot.MOTHERLODE;
 		}
-		return AMETHYST.contains(objectId) ? Spot.AMETHYST : null;
+		if (AMETHYST.contains(objectId))
+		{
+			return Spot.AMETHYST;
+		}
+		return DENSE_RUNESTONES.contains(objectId) ? Spot.DENSE_ESSENCE : null;
 	}
 }

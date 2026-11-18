@@ -161,11 +161,23 @@ public interface AfkSkillingConfig extends Config
 	}
 
 	@ConfigItem(
+		keyName = "miningDenseEssence",
+		name = "Dense essence",
+		description = "Mining the dense runestones in Arceuus, so you know when one depletes",
+		section = mining,
+		position = 4
+	)
+	default boolean miningDenseEssence()
+	{
+		return true;
+	}
+
+	@ConfigItem(
 		keyName = "miningOther",
 		name = "Other mining",
 		description = "Any other rock. Off by default so power-mining isn't dimmed and alerted every few seconds",
 		section = mining,
-		position = 4
+		position = 5
 	)
 	default boolean miningOther()
 	{
